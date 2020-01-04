@@ -4,106 +4,10 @@
     <title>Standby Spots</title>
     <meta charset="UTF-8" />
     <script src="https://api.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.js"></script>
-    <link
-      href="https://api.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.css"
-      rel="stylesheet"
-    />
-    <style>
-      body {
-        color: #404040;
-        font: 400 15px/22px 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
-        margin: 0;
-        padding: 0;
-        -webkit-font-smoothing: antialiased;
-      }
-
-      .map {
-        position: absolute;
-        left: 33.3333%;
-        width: 66.6666%;
-        top: 0;
-        bottom: 0;
-      }
-    </style>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.css" rel="stylesheet" />
   </head>
-
   <body>
-    <div class='sidebar'>
-      <div class='heading'>
-        <h1>Our locations</h1>
-      </div>
-      <div id='listings' class='listings'></div>
-    </div>
-    <div id="map" style="width: 400px; height: 300px;"></div>
-
-    <script src="src/index.js"></script>
-    <script>
-     fetch("./data.geojson")
-      .then(response => response.json())
-      .then(json => {
-        mapboxgl.accessToken =
-        "pk.eyJ1IjoibWF3aWxsY294IiwiYSI6ImNqMDc5c3BhZzAwNjIzMmxmOGplbWo3bzkifQ.oDeFG1rRfc-aL9ST6LOPcQ";
-        var map = new mapboxgl.Map({
-          container: "map",
-          style: "mapbox://styles/mapbox/outdoors-v11",
-          center: [-122.425017345697, 37.7764970894399],
-          zoom: 11
-        });
-
-        map.on('load', function (e) {
-          map.addLayer({
-            "id": "locations",
-            "type": "symbol",
-            "source": {
-              "type": "geojson",
-              "data": json
-            },
-            "layout": {
-              "icon-image": "park-11",
-              "icon-allow-overlap": true,
-            }
-          });
-          var popup = new mapboxgl.Popup({
-            closeButton: false,
-            closeOnClick: false
-          });
-          /** TODO:
-           * Make it on click
-           * Add clusters
-           * Add more info to tooltip
-           * Refactor code into JS file 
-           * Put on Github
-           * Add list view
-           * Fix method of fetching JSON
-          **/
-          map.on('mouseenter', 'locations', function(e) {
-            // Change the cursor style as a UI indicator.
-            map.getCanvas().style.cursor = 'pointer';
-            
-            var coordinates = e.features[0].geometry.coordinates.slice();
-            var address = e.features[0].properties.address;
-            
-            // Ensure that if the map is zoomed out such that multiple
-            // copies of the feature are visible, the popup appears
-            // over the copy being pointed to.
-            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-              coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-            }
-            
-            // Populate the popup and set its coordinates
-            // based on the feature found.
-            popup
-              .setLngLat(coordinates)
-              .setHTML(address)
-              .addTo(map);
-          });
-            
-          map.on('mouseleave', 'places', function() {
-            map.getCanvas().style.cursor = '';
-            popup.remove();
-          });
-        });      
-      });
-    </script>
+    <div id="map" style="position: absolute; top: 0; bottom: 0; width: 100%;"></div>
+    <script src="index.js"></script>
   </body>
 </html>
