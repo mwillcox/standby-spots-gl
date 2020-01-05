@@ -1,3 +1,7 @@
+.header {
+  position: relative;
+}
+
 .location-popup b{
   font-size: 12px;
 }
