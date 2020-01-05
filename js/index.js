@@ -8,14 +8,10 @@ var map = new mapboxgl.Map({
   zoom: 11
 });
 
-/** TODO:
-   * Add list view
-   * Adjust color based on type
-  **/
 map.on('load', function (e) {
   map.addSource('locations', {
     type: 'geojson',
-    data: '../data/locations.geojson',
+    data: './data/locations.geojson',
     cluster: true,
     clusterMaxZoom: 11, // Max zoom to cluster points on
     clusterRadius: 10 // Radius of each cluster when clustering points (defaults to 50)
