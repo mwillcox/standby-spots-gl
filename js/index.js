@@ -1,7 +1,7 @@
 // Create the mapbox canvas
 mapboxgl.accessToken =
   "pk.eyJ1IjoibWF3aWxsY294IiwiYSI6ImNqMDc5c3BhZzAwNjIzMmxmOGplbWo3bzkifQ.oDeFG1rRfc-aL9ST6LOPcQ";
-var map = new mapboxgl.Map({
+let map = new mapboxgl.Map({
   container: "map",
   style: "mapbox://styles/mapbox/outdoors-v11",
   center: [-122.425017345697, 37.7764970894399],
@@ -33,15 +33,16 @@ map.on('load', function (e) {
       'circle-radius': [
         'interpolate', ['linear'], ['zoom'],
         11, 6,
-        13, 4,
+        13, 5,
+        15, 4
       ],
       'circle-stroke-width': 1,
       'circle-stroke-color': '#fff'
     }
   });
 
-  var popup = new mapboxgl.Popup({
-    closeButton: false,
+  let popup = new mapboxgl.Popup({
+    closeButton: true,
     closeOnClick: false
   });
   
@@ -50,11 +51,23 @@ map.on('load', function (e) {
     // Change the cursor style as a UI indicator.
     map.getCanvas().style.cursor = 'pointer';
     
-    var coordinates = e.features[0].geometry.coordinates.slice();
-    var properties = e.features[0].properties;
+    let coordinates = e.features[0].geometry.coordinates.slice();
+    let properties = e.features[0].properties;
+    
+    let innerContent = '';
+    switch(properties.type) {
+      case 'Park':
+        innerContent = `<b>${properties.name}</b><br/>${properties.address}<br/>${properties.description}`;
+        break;
+      case 'Parklet':
+        innerContent = `<b>${properties.name}</b><br/>${properties.address}`;
+        break;
+      case 'Privately Owned Public Open Space':
+        innerContent = `<b>${properties.type}</b><br/>${properties.name}<br/>${properties.description}`
+        break;
+    }
 
-    // TODO: Make into case statement
-    var content = `<div class='location-popup'><b>${properties.name}</b><br/>${properties.address}<br/>Type: ${properties.type}<br/>${properties.description !== undefined ? properties.description : ''}</div>`;
+    let content = `<div class='location-popup'>${innerContent}</div>`;
     
     // Ensure that if the map is zoomed out such that multiple
     // copies of the feature are visible, the popup appears
