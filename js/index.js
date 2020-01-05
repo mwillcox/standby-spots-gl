@@ -16,7 +16,7 @@ var map = new mapboxgl.Map({
 map.on('load', function (e) {
   map.addSource('locations', {
     type: 'geojson',
-    data: './data.geojson',
+    data: '../data/locations.geojson',
     cluster: true,
     clusterMaxZoom: 11, // Max zoom to cluster points on
     clusterRadius: 10 // Radius of each cluster when clustering points (defaults to 50)
@@ -28,7 +28,11 @@ map.on('load', function (e) {
     source: 'locations',
     paint: {
       'circle-color': '#11b4da',
-      'circle-radius': 4,
+      'circle-radius': [
+        'interpolate', ['linear'], ['zoom'],
+        11, 6,
+        13, 4,
+      ],
       'circle-stroke-width': 1,
       'circle-stroke-color': '#fff'
     }
@@ -44,7 +48,10 @@ map.on('load', function (e) {
     map.getCanvas().style.cursor = 'pointer';
     
     var coordinates = e.features[0].geometry.coordinates.slice();
-    var address = e.features[0].properties.address;
+    var properties = e.features[0].properties;
+    
+    // TODO: Make into case statement
+    var content = `<div class='location-popup'><b>${properties.name}</b><br/>Type: ${properties.type}<br/>${properties.address}<br/>${properties.description !== undefined ? properties.description : ''}</div>`;
     
     // Ensure that if the map is zoomed out such that multiple
     // copies of the feature are visible, the popup appears
@@ -54,10 +61,9 @@ map.on('load', function (e) {
     }
     
     // Populate the popup and set its coordinates
-    // based on the feature found.
     popup
       .setLngLat(coordinates)
-      .setHTML(address)
+      .setHTML(content)
       .addTo(map);
   });
 });
