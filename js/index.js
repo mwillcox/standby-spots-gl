@@ -9,7 +9,6 @@ var map = new mapboxgl.Map({
 });
 
 /** TODO:
-   * Add more info to tooltip
    * Add list view
    * Adjust color based on type
   **/
@@ -27,7 +26,14 @@ map.on('load', function (e) {
     type: 'circle',
     source: 'locations',
     paint: {
-      'circle-color': '#11b4da',
+      'circle-color': [
+        'match', 
+        ['get', 'type'], 
+        'Park', '#ff6600',
+        'Parklet', '#009900',
+        'Privately Owned Public Space', '#cccc00',
+        '#cccc00'
+      ],
       'circle-radius': [
         'interpolate', ['linear'], ['zoom'],
         11, 6,
@@ -44,14 +50,15 @@ map.on('load', function (e) {
   });
   
   map.on('click', 'unclustered-point', function(e) {
+    
     // Change the cursor style as a UI indicator.
     map.getCanvas().style.cursor = 'pointer';
     
     var coordinates = e.features[0].geometry.coordinates.slice();
     var properties = e.features[0].properties;
-    
+
     // TODO: Make into case statement
-    var content = `<div class='location-popup'><b>${properties.name}</b><br/>Type: ${properties.type}<br/>${properties.address}<br/>${properties.description !== undefined ? properties.description : ''}</div>`;
+    var content = `<div class='location-popup'><b>${properties.name}</b><br/>${properties.address}<br/>Type: ${properties.type}<br/>${properties.description !== undefined ? properties.description : ''}</div>`;
     
     // Ensure that if the map is zoomed out such that multiple
     // copies of the feature are visible, the popup appears
@@ -65,5 +72,15 @@ map.on('load', function (e) {
       .setLngLat(coordinates)
       .setHTML(content)
       .addTo(map);
+    
+    // Zoom map to focus on marker
+    flyToLocation(e.features[0]);
   });
 });
+
+function flyToLocation(currentFeature) {
+  map.flyTo({
+    center: currentFeature.geometry.coordinates,
+    zoom: 13
+  });
+}
