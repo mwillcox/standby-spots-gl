@@ -13,7 +13,7 @@ map.on('load', function (e) {
   // Adding just the geojson data
   map.addSource('locations', {
     type: 'geojson',
-    data: '../data/locations.geojson',
+    data: 'src/data/locations.geojson',
     cluster: true,
     clusterMaxZoom: 11, // Max zoom to cluster points on
     clusterRadius: 10 // Radius of each cluster when clustering points (defaults to 50)
