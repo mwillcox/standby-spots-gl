@@ -10,7 +10,7 @@ Skills learned through this work:
 
 Features to add in the future:
 - Better mobile experience
-- Additinoal clustering styles
+- Additional clustering styles
 - List view with filters
 - Additional data sources
 - Public transportation routing
