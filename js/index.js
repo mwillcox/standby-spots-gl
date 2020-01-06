@@ -8,7 +8,9 @@ let map = new mapboxgl.Map({
   zoom: 11
 });
 
+// When the map has loaded, add data, markers, and popup functionality
 map.on('load', function (e) {
+  // Adding just the geojson data
   map.addSource('locations', {
     type: 'geojson',
     data: './data/locations.geojson',
@@ -17,6 +19,7 @@ map.on('load', function (e) {
     clusterRadius: 10 // Radius of each cluster when clustering points (defaults to 50)
   });
   
+  // Adding points to the map for each type of location
   map.addLayer({
     id: 'unclustered-point',
     type: 'circle',
@@ -33,8 +36,7 @@ map.on('load', function (e) {
       'circle-radius': [
         'interpolate', ['linear'], ['zoom'],
         11, 6,
-        13, 5,
-        15, 4
+        13, 5
       ],
       'circle-stroke-width': 1,
       'circle-stroke-color': '#fff'
@@ -46,6 +48,7 @@ map.on('load', function (e) {
     closeOnClick: false
   });
   
+  // Generate a popup with more info for the clicked location
   map.on('click', 'unclustered-point', function(e) {
     
     // Change the cursor style as a UI indicator.
@@ -82,14 +85,37 @@ map.on('load', function (e) {
       .setHTML(content)
       .addTo(map);
     
-    // Zoom map to focus on marker
+    // Zoom map to focus on clicked locations
     flyToLocation(e.features[0]);
   });
 });
 
+// Focuses the map on a location
 function flyToLocation(currentFeature) {
   map.flyTo({
     center: currentFeature.geometry.coordinates,
     zoom: 13
   });
+}
+
+// Info button logic
+var modal = document.getElementById("infoModal");
+var btn = document.getElementById("infoBtn");
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal 
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
 }
