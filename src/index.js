@@ -1,3 +1,5 @@
+import data from './locations.geojson'
+
 // Create the mapbox canvas
 mapboxgl.accessToken =
   "pk.eyJ1IjoibWF3aWxsY294IiwiYSI6ImNqMDc5c3BhZzAwNjIzMmxmOGplbWo3bzkifQ.oDeFG1rRfc-aL9ST6LOPcQ";
@@ -13,7 +15,7 @@ map.on('load', function (e) {
   // Adding just the geojson data
   map.addSource('locations', {
     type: 'geojson',
-    data: 'src/data/locations.geojson',
+    data: data,
     cluster: true,
     clusterMaxZoom: 11, // Max zoom to cluster points on
     clusterRadius: 10 // Radius of each cluster when clustering points (defaults to 50)
