@@ -1,4 +1,6 @@
-import data from './locations.geojson'
+import './styles.css';
+import data from './locations.json';
+import mapboxgl from 'mapbox-gl';
 
 // Create the mapbox canvas
 mapboxgl.accessToken =
@@ -10,7 +12,7 @@ let map = new mapboxgl.Map({
   zoom: 11
 });
 
-// When the map has loaded, add data, markers, and popup functionality
+// // When the map has loaded, add data, markers, and popup functionality
 map.on('load', function (e) {
   // Adding just the geojson data
   map.addSource('locations', {

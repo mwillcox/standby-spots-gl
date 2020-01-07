@@ -1,6 +1,6 @@
 ## Standby Spots with Mapbox GL JS
 
-#### The app is viewable live [here](https://mwillcox.github.io/standby-spots-gl/).
+#### The app is viewable live [here](https://standby-spots-gl.netlify.com/).
 
 Using multiple data sets from [https://data.sfgov.org/](https://data.sfgov.org/) this interactive Mapbox GL map displays location data for all of the public parks, parklets, and privately owned public open spaces in San Francisco.
 
