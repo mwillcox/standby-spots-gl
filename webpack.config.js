@@ -1,4 +1,5 @@
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: './src/index.js',
@@ -18,4 +19,12 @@ module.exports = {
       },
     ],
    },
+   plugins: [
+    new HtmlWebpackPlugin({
+      // injects bundle.js to our new index.html
+      inject: true,
+      // copys the content of the existing index.html to the new /build index.html
+      template:  path.resolve('./index.html'),
+    }),
+  ]
 };
